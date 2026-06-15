@@ -1,120 +1,138 @@
+// ignore_for_file: use_build_context_synchronously, control_flow_in_finally
 import 'package:flutter/material.dart';
+import 'package:ornek/models/appointment_filter_model.dart';
+import 'package:ornek/models/appointment_model.dart';
+import 'package:ornek/services/appointment_list.dart';
+import 'package:ornek/services/update_appointment.dart';
 import 'package:ornek/widgets/app_bar.dart';
 
-// BayiAccept : Bayilerin müşterilerin randevu taleplerini görüp randevuları onaylayıp reddedebildiği ekran
+// BayiAccept : ilgili bayinin beklemede olan randevuları kabul edip red edeceği sayfa
 class BayiAccept extends StatefulWidget {
-  const BayiAccept({super.key});
+  final int userId;
+  final int bayiId;
+
+  const BayiAccept({super.key, required this.userId, required this.bayiId});
 
   @override
   State<BayiAccept> createState() => _BayiAcceptState();
 }
 
 class _BayiAcceptState extends State<BayiAccept> {
+  List<AppointmentModel> appointments = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAppointments();
+  }
+
+  Future<void> fetchAppointments() async {
+    setState(() => isLoading = true);
+
+    try {
+      final request = AppointmentFilterModel(
+        bayiId: widget.bayiId,
+        status: "pending",
+      );
+
+      appointments = await AppointmentListService.fetchAppointments(request);
+    } catch (e) {
+      debugPrint("Hata: $e");
+    } finally {
+      if (!mounted) return;
+      setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> handleAppointment(
+    int appointmentId,
+    String status,
+    String message,
+  ) async {
+    try {
+      final result = await UpdateAppointmentService.updateStatus(
+        appointmentId: appointmentId,
+        status: status,
+      );
+
+      if (result) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+
+        await fetchAppointments();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("İşlem başarısız")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(userId: widget.userId),
 
       body: Padding(
-        padding: EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+        padding: const EdgeInsets.all(16),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : appointments.isEmpty
+            ? const Center(child: Text("Randevu yok"))
+            : ListView.builder(
+                itemCount: appointments.length,
+                itemBuilder: (context, index) {
+                  final item = appointments[index];
 
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Müşteri: Dilara BENDER'),
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Müşteri: ${item.customerName}"),
+                          Text("Tarih: ${item.appDate}"),
+                          Text("Bina: ${item.buildingTitle}"),
 
-                    SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                    Text('Tarih/Saat: 10.11.2022-21.00'),
-
-                    SizedBox(height: 12),
-
-                    Text('Bina-Adres: Ataşehir-B Blok'),
-
-                    SizedBox(height: 12),
-
-                    // butonları yan yana konumlandırmak için Row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Onayla'),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () => handleAppointment(
+                                    item.appointmentId,
+                                    "approved",
+                                    "Randevu Onaylandı",
+                                  ),
+                                  child: const Text("Onayla"),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  onPressed: () => handleAppointment(
+                                    item.appointmentId,
+                                    "Rejected",
+                                    "Randevu Reddedildi",
+                                  ),
+                                  child: const Text("Red"),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-
-                        const SizedBox(width: 12),
-
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Red Et'),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Müşteri: Dilara BENDER'),
-
-                    SizedBox(height: 12),
-
-                    Text('Tarih/Saat: 10.11.2022-21.00'),
-
-                    SizedBox(height: 12),
-
-                    Text('Bina-Adres: Ataşehir-B Blok'),
-
-                    SizedBox(height: 12),
-
-                    // butonları yan yana konumlandırmak için Row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Onayla'),
-                          ),
-                        ),
-
-                        const SizedBox(width: 12),
-
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Red Et'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

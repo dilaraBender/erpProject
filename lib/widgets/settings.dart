@@ -1,32 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:ornek/app_localizations.dart';
+import 'package:ornek/language.dart';
 import 'package:ornek/theme_provider.dart';
+import 'package:ornek/widgets/chanage_pasword.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 // Settings : Uygulamanın görünüm,bildirim gibi ayarlarını ayarlamak için kullanılan ortak ekran
-
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final int userId;
+  const Settings({super.key, required this.userId});
 
   @override
   State<Settings> createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-  bool notificationsEnabled = true;
-  bool darkModeEnabled = false;
-  String selectedLanguage = "tr";
+  bool notificationsEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotificationStatus();
+  }
+
+  Future<void> loadNotificationStatus() async {
+    final status = await Permission.notification.status;
+
+    setState(() {
+      notificationsEnabled = status.isGranted;
+    });
+  }
+
+  Future<void> toggleNotifications(bool value) async {
+    if (value) {
+      final result = await Permission.notification.request();
+
+      setState(() {
+        notificationsEnabled = result.isGranted;
+      });
+    } else {
+      await openAppSettings();
+
+      final status = await Permission.notification.status;
+
+      setState(() {
+        notificationsEnabled = status.isGranted;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final lang = AppLocalizations.of(context);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
 
-          const Text(
-            "BİLDİRİMLER",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+          /// NOTIFICATIONS
+          Text(
+            lang.notifications.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           const SizedBox(height: 8),
@@ -36,21 +77,56 @@ class _SettingsState extends State<Settings> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: SwitchListTile(
-              title: const Text("Bildirimler"),
+              title: Text(lang.notifications),
+              subtitle: Text(
+                notificationsEnabled
+                    ? lang.notificationsOn
+                    : lang.notificationsOff,
+              ),
               value: notificationsEnabled,
-              onChanged: (value) {
-                setState(() {
-                  notificationsEnabled = value;
-                });
+              onChanged: toggleNotifications,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          /// HESAP
+          const Text(
+            "HESAP",
+            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+          ),
+
+          const SizedBox(height: 8),
+
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.lock_outline),
+              title: const Text("Şifre Değiştir"),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ChangePasswordPage(userId: widget.userId),
+                  ),
+                );
               },
             ),
           ),
 
           const SizedBox(height: 16),
 
-          const Text(
-            "GÖRÜNÜM",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+          /// APPEARANCE
+          Text(
+            lang.appearance.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           const SizedBox(height: 8),
@@ -62,50 +138,55 @@ class _SettingsState extends State<Settings> {
             child: Column(
               children: [
                 SwitchListTile(
-                  title: const Text("Karanlık Mod"),
-                  value: Provider.of<ThemeProvider>(context).isDarkMode,
+                  title: Text(lang.darkMode),
+                  value: themeProvider.isDarkMode,
                   onChanged: (value) {
-                    // Tema değiştirme işlemi ThemeProvider'da yapılır
-                    Provider.of<ThemeProvider>(
-                      context,
-                      listen: false,
-                    ).toggleTheme(value);
+                    themeProvider.toggleTheme(value);
                   },
                 ),
 
-                ListTile(
-                  title: const Text("Dil"),
-                  trailing: DropdownButton<String>(
-                    value: selectedLanguage,
-                    underline: const SizedBox(),
-                    items: const [
-                      DropdownMenuItem(value: "tr", child: Text("Türkçe")),
-                      DropdownMenuItem(value: "en", child: Text("English")),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLanguage = value!;
-                      });
-                    },
-                  ),
+                Consumer<LanguageProvider>(
+                  builder: (context, languageProvider, child) {
+                    return ListTile(
+                      title: Text(lang.language),
+                      trailing: DropdownButton<String>(
+                        value: languageProvider.locale.languageCode,
+                        underline: const SizedBox(),
+                        items: const [
+                          DropdownMenuItem(value: "tr", child: Text("Türkçe")),
+                          DropdownMenuItem(value: "en", child: Text("English")),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            languageProvider.changeLanguage(value);
+                          }
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
 
-          const Text(
-            "HAKKINDA",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+          const SizedBox(height: 16),
+
+          /// ABOUT
+          Text(
+            lang.about.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           const SizedBox(height: 8),
 
-          ListTile(title: Text("Versiyon"), trailing: Text("1.0.0")),
+          ListTile(title: Text(lang.version), trailing: const Text("1.0.0")),
 
-          // Yatay ince çizgi
-          Divider(height: 0),
+          const Divider(height: 0),
 
-          ListTile(title: Text("Geliştirici"), trailing: Text("PATA")),
+          ListTile(title: Text(lang.developer), trailing: const Text("PATA")),
         ],
       ),
     );

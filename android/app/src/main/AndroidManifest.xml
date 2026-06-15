@@ -1,8 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--konum izinleri-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+<!--bildirim izinleri-->
+     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+     <uses-permission android:name="android.permission.INTERNET"/>
+     
     <application
-        android:label="ornek"
+        android:label="PATA TECHONOLOGY"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+     
         <activity
             android:name=".MainActivity"
             android:exported="true"

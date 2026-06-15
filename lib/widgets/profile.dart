@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-// Profile : Kullanıcıların bilgilerini güncelleyeebileceği ortak ekran
-
+// Profile : Kullanıcıların bilgilerini güncelleyebileceği ortak ekran
 class Profile extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController lastNameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
-  final TextEditingController userNameController;
-  final TextEditingController passwordController;
+  final TextEditingController? userNameController;
+  final TextEditingController? passwordController;
   final TextEditingController? taxController;
   final TextEditingController? taxNoController;
   final TextEditingController? firmController;
   final TextEditingController? firmAddressController;
   final TextEditingController? firmMailController;
   final TextEditingController? firmIbanController;
+
   final bool isCustomer;
 
   const Profile({
@@ -23,8 +23,8 @@ class Profile extends StatelessWidget {
     required this.lastNameController,
     required this.emailController,
     required this.phoneController,
-    required this.passwordController,
-    required this.userNameController,
+    this.passwordController,
+    this.userNameController,
     this.taxController,
     this.taxNoController,
     this.firmController,
@@ -46,18 +46,9 @@ class Profile extends StatelessWidget {
               radius: 50,
             ),
 
-            Text('Yönetici'),
+            const SizedBox(height: 12),
 
-            const SizedBox(height: 8),
-
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Profili Değiştir'),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
+            const Text(
               "Kişisel Bilgiler",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
@@ -67,18 +58,14 @@ class Profile extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    const SizedBox(height: 12),
-
                     TextField(
                       controller: nameController,
-                      keyboardType: TextInputType.name,
                       decoration: const InputDecoration(
-                        labelText: 'Adınızı Giriniz',
+                        labelText: 'Ad',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -87,9 +74,8 @@ class Profile extends StatelessWidget {
 
                     TextField(
                       controller: lastNameController,
-                      keyboardType: TextInputType.name,
                       decoration: const InputDecoration(
-                        labelText: 'Soyadınızı Giriniz',
+                        labelText: 'Soyad',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -98,9 +84,8 @@ class Profile extends StatelessWidget {
 
                     TextField(
                       controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                        labelText: 'Emailinizi Giriniz',
+                        labelText: 'Email',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -109,9 +94,8 @@ class Profile extends StatelessWidget {
 
                     TextField(
                       controller: phoneController,
-                      keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
-                        labelText: 'Telefon Numaranızı Giriniz',
+                        labelText: 'Telefon',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -120,28 +104,25 @@ class Profile extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
-            if (isCustomer == false) ...[
-              Text(
+            if (!isCustomer) ...[
+              const Text(
                 "Şirket Bilgileri",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      const SizedBox(height: 12),
-
                       TextField(
                         controller: firmController,
-                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           labelText: 'Şirket Adı',
                           border: OutlineInputBorder(),
@@ -152,7 +133,6 @@ class Profile extends StatelessWidget {
 
                       TextField(
                         controller: taxController,
-                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           labelText: 'Vergi Dairesi',
                           border: OutlineInputBorder(),
@@ -163,20 +143,8 @@ class Profile extends StatelessWidget {
 
                       TextField(
                         controller: taxNoController,
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          labelText: 'Vergi Numarası',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextField(
-                        controller: firmMailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: 'Kurumsal mail adresi',
+                          labelText: 'Vergi No',
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -185,21 +153,8 @@ class Profile extends StatelessWidget {
 
                       TextField(
                         controller: firmAddressController,
-                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           labelText: 'Adres',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextField(
-                        controller: firmIbanController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true, //şifreyi gizleme
-                        decoration: const InputDecoration(
-                          labelText: 'Iban',
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -208,7 +163,6 @@ class Profile extends StatelessWidget {
                 ),
               ),
             ],
-            ElevatedButton(onPressed: () {}, child: Text('Kaydet')),
           ],
         ),
       ),

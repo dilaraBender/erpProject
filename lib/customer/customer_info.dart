@@ -4,7 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Info : Müşteri panelinde şirket bilgilendirimesi için kullanılan sayfa
 class Info extends StatefulWidget {
-  const Info({super.key});
+  final int userId;
+  const Info({super.key, required this.userId});
 
   @override
   State<Info> createState() => _InfoState();
@@ -14,7 +15,7 @@ class _InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(userId: widget.userId),
 
       // kaydırma cubuğu için
       body: SingleChildScrollView(

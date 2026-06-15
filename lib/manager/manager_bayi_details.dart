@@ -1,211 +1,234 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:ornek/models/bayi_model.dart';
 import 'package:ornek/widgets/app_bar.dart';
 
-// ManagerBAyiDetails : yönetici için bayilerin detay bilgilerinin bulunduğu sayfa
+// ManagerBayiDetails : yöneticinin bayi detaylarını görüntülediği sayfa
+class ManagerBayiDetails extends StatelessWidget {
+  final int userId;
+  final BayiModel bayi;
 
-class ManagerBayiDetails extends StatefulWidget {
-  const ManagerBayiDetails({super.key});
-  @override
-  State<ManagerBayiDetails> createState() => _ManagerBayiDetailsState();
-}
+  const ManagerBayiDetails({
+    super.key,
+    required this.userId,
+    required this.bayi,
+  });
 
-class _ManagerBayiDetailsState extends State<ManagerBayiDetails> {
-  // Controller
-  final TextEditingController bayiMailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController bayiNameController = TextEditingController();
-  final TextEditingController bayiPhoneController = TextEditingController();
-  final TextEditingController bayiController = TextEditingController();
-  final TextEditingController sumMonyController = TextEditingController();
-  final TextEditingController sumDateController = TextEditingController();
-  final TextEditingController monthMonyController = TextEditingController();
-  final TextEditingController monthDateController = TextEditingController();
-  final TextEditingController firmaNameController = TextEditingController();
-  final TextEditingController firmaAdresController = TextEditingController();
-  final TextEditingController firmaIlController = TextEditingController();
-  final TextEditingController firmaTaxNoController = TextEditingController();
-  final TextEditingController firmaTaxController = TextEditingController();
-
-  String selectedRole = 'musteri';
+  bool get hasLocation => bayi.latitude != null && bayi.longitude != null;
 
   @override
   Widget build(BuildContext context) {
+    final LatLng defaultCenter = const LatLng(39.0, 35.0);
+
+    final LatLng? point = hasLocation
+        ? LatLng(bayi.latitude!, bayi.longitude!)
+        : null;
+
     return Scaffold(
-      appBar: const AppBarWidget(),
+      backgroundColor: const Color(0xffF5F7FA),
+      appBar: AppBarWidget(userId: userId),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // ÜST PROFİL KARTI
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xff2563EB), Color(0xff1E40AF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 12,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 38,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.business,
+                        size: 40,
+                        color: Color(0xff2563EB),
+                      ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    Text(
+                      bayi.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        hasLocation
+                            ? "Konum Bilgisi Mevcut"
+                            : "Konum Bilgisi Yok",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // DETAY KARTI
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(18),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(18),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Ankara Bayiliği'),
-
-                      TextFormField(
-                        controller: bayiNameController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Yönetici Adı: User Name',
-                          border: OutlineInputBorder(),
+                      const Text(
+                        "Bayi Bilgileri",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 19,
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 20),
 
-                      TextFormField(
-                        controller: bayiPhoneController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'İletişim Numarası: 55555555',
-                          border: OutlineInputBorder(),
-                        ),
+                      detailRow(Icons.email_outlined, "Mail", bayi.mail),
+
+                      const SizedBox(height: 16),
+
+                      detailRow(
+                        Icons.phone_outlined,
+                        "Telefon",
+                        bayi.phone ?? "-",
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
 
-                      TextFormField(
-                        controller: bayiMailController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Mail Adresi: @gmail',
-                          border: OutlineInputBorder(),
-                        ),
+                      detailRow(
+                        Icons.location_on_outlined,
+                        "Konum Durumu",
+                        hasLocation ? "Mevcut" : "Bulunamadı",
+                        valueColor: hasLocation ? Colors.green : Colors.red,
                       ),
+
+                      if (hasLocation) ...[
+                        const SizedBox(height: 16),
+
+                        detailRow(
+                          Icons.map_outlined,
+                          "Latitude",
+                          bayi.latitude.toString(),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        detailRow(
+                          Icons.map_outlined,
+                          "Longitude",
+                          bayi.longitude.toString(),
+                        ),
+                      ],
                     ],
                   ),
                 ),
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 20),
 
+              // HARİTA
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(18),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(14),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Firma Bilgileri'),
-
-                      TextFormField(
-                        controller: firmaNameController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText:
-                              'Firma Adı: Pata Technology Ankara Bayiliği',
-                          border: OutlineInputBorder(),
+                      const Text(
+                        "Harita Görünümü",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 14),
 
-                      TextFormField(
-                        controller: firmaTaxNoController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Vergi Numarası : 55555555',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                      SizedBox(
+                        height: 350,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: FlutterMap(
+                            options: MapOptions(
+                              initialCenter: point ?? defaultCenter,
+                              initialZoom: hasLocation ? 15 : 6,
+                            ),
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                userAgentPackageName: 'com.example.ornek',
+                              ),
 
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: firmaTaxController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Vergi Dairesi: Ankara - Bilkent',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: firmaAdresController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Adres: Ankara - Bilkent',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: firmaIlController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'İl/İlçe: Ankara/Bilkent',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 15),
-
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const Text('Performans'),
-
-                      TextFormField(
-                        controller: sumDateController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Toplam Randevu : 120',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: sumMonyController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Toplam Kazanç : 1.500.000',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: monthDateController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Aylık Randevu: 15',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      TextFormField(
-                        controller: monthMonyController,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          labelText: 'Aylık Kazanç: 120.000',
-                          border: OutlineInputBorder(),
+                              if (hasLocation)
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                      point: point!,
+                                      width: 60,
+                                      height: 60,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.withOpacity(0.15),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 40,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -216,6 +239,52 @@ class _ManagerBayiDetailsState extends State<ManagerBayiDetails> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget detailRow(
+    IconData icon,
+    String title,
+    String value, {
+    Color? valueColor,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xffEFF6FF),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: const Color(0xff2563EB)),
+        ),
+
+        const SizedBox(width: 14),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+
+              const SizedBox(height: 4),
+
+              Text(
+                value,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: valueColor ?? Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

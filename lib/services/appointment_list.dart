@@ -1,0 +1,29 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:ornek/models/appointment_filter_model.dart';
+import 'package:ornek/models/appointment_model.dart';
+import 'package:ornek/url.dart';
+
+// Randevuları listelemek için WebApi ile bağlantı kurduğumuz servis
+class AppointmentListService {
+  static Future<List<AppointmentModel>> fetchAppointments(
+    AppointmentFilterModel request,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse("${ApiConfig.baseUrl}/AppointmentList/AppointmentList"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => AppointmentModel.fromJson(e)).toList();
+      } else {
+        throw Exception('Randevular alınamadı: ${response.body}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+}

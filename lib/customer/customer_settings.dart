@@ -4,7 +4,13 @@ import 'package:ornek/widgets/settings.dart';
 
 // CustomerSettings : müşteri paneli için ayarlar görünümü
 class CustomerSettings extends StatefulWidget {
-  const CustomerSettings({super.key});
+  final int userId;
+  final int customerId;
+  const CustomerSettings({
+    super.key,
+    required this.userId,
+    required this.customerId,
+  });
 
   @override
   State<CustomerSettings> createState() => _CustomerSettingsState();
@@ -13,6 +19,9 @@ class CustomerSettings extends StatefulWidget {
 class _CustomerSettingsState extends State<CustomerSettings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: const AppBarWidget(), body: Settings());
+    return Scaffold(
+      appBar: AppBarWidget(userId: widget.userId),
+      body: Settings(userId: widget.userId),
+    );
   }
 }

@@ -4,7 +4,8 @@ import 'package:ornek/widgets/settings.dart';
 
 // ManagerSettings : yönetici paneli için ayarlar görünümü
 class ManagerSettings extends StatefulWidget {
-  const ManagerSettings({super.key});
+  final int userId;
+  const ManagerSettings({super.key, required this.userId});
 
   @override
   State<ManagerSettings> createState() => _ManagerSettingsState();
@@ -13,6 +14,9 @@ class ManagerSettings extends StatefulWidget {
 class _ManagerSettingsState extends State<ManagerSettings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: const AppBarWidget(), body: Settings());
+    return Scaffold(
+      appBar: AppBarWidget(userId: widget.userId),
+      body: Settings(userId: widget.userId),
+    );
   }
 }

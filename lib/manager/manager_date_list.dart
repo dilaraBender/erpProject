@@ -1,137 +1,110 @@
 import 'package:flutter/material.dart';
-import 'package:ornek/manager/manager_date_details.dart';
+import 'package:ornek/models/appointment_filter_model.dart';
+import 'package:ornek/models/appointment_model.dart';
+import 'package:ornek/services/appointment_list.dart';
 import 'package:ornek/widgets/app_bar.dart';
+import 'package:ornek/widgets/appointment.dart';
+import 'package:ornek/widgets/create_appointment.dart';
 
 // ManagerDateList : yönetici için randevuların listelendiği ve filtrelendiği sayfa
-
 class ManagerDateList extends StatefulWidget {
-  const ManagerDateList({super.key});
+  final int userId;
+  const ManagerDateList({super.key, required this.userId});
   @override
   State<ManagerDateList> createState() => _ManagerDateListState();
 }
 
 class _ManagerDateListState extends State<ManagerDateList> {
-  DateTime? selectedDate;
+  final TextEditingController binaController = TextEditingController();
+  final TextEditingController binaAdresController = TextEditingController();
+  final TextEditingController notController = TextEditingController();
+  List<AppointmentModel> appointments = [];
+  @override
+  void initState() {
+    super.initState();
+    _applyFilters(); // ilk yükleme
+  }
 
-  // tarih seçimi içim kullanılan fonk.
-  Future<void> _pickDate() async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2030),
-    );
-
-    if (date != null) {
+  Future<void> _applyFilters({
+    int? bayiId,
+    int? customerId,
+    int? buildingId,
+    String? status,
+    DateTime? selectedDate,
+  }) async {
+    try {
+      final filters = AppointmentFilterModel(
+        bayiId: bayiId,
+        customerId: customerId,
+        buildingId: buildingId,
+        status: status,
+        startDate: selectedDate,
+        endDate: selectedDate,
+      );
+      final result = await AppointmentListService.fetchAppointments(filters);
+      if (!mounted) return;
       setState(() {
-        selectedDate = date;
+        appointments = result;
       });
+    } catch (e) {
+      debugPrint("Manager randevu yükleme hatası: $e");
     }
   }
 
   @override
+  void dispose() {
+    binaController.dispose();
+    binaAdresController.dispose();
+    notController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarWidget(),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBarWidget(
+          userId: widget.userId,
+          tabBar: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.add), text: 'Yeni'),
+              Tab(icon: Icon(Icons.schedule), text: 'Randevular'),
+            ],
+          ),
+        ),
+        body: TabBarView(
           children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Bayi veya Müşteri ara...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
+            // CREATE
+            AppointmentForm(
+              userId: widget.userId,
+              customerId: 0,
+              isBayi: true,
+              binaController: binaController,
+              binaAdresController: binaAdresController,
+              notController: notController,
             ),
-
-            const SizedBox(height: 20),
-
-            SizedBox(
-              height: 70,
-              child: InkWell(
-                onTap: _pickDate,
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelText: 'Tarihe Göre Filtrele',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: const Icon(Icons.calendar_today),
-                  ),
-                  child: Text(
-                    selectedDate == null
-                        ? 'Tarih Seç'
-                        : '${selectedDate!.day}.${selectedDate!.month}.${selectedDate!.year}',
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 70,
-              child: DropdownButtonFormField<String>(
-                items: const [],
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Bayiye Göre Filtrele',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 70,
-              child: DropdownButtonFormField<String>(
-                items: const [],
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Müşteriye Göre Filtrele',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 70,
-              child: DropdownButtonFormField<String>(
-                items: const [],
-                onChanged: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'Randevu Durumuna Göre Filtrele',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-
-            DataTable(
-              columns: const [
-                DataColumn(label: Text('Tarih')),
-                DataColumn(label: Text('Müşteri')),
-                DataColumn(label: Text('Bayi')),
-                DataColumn(label: Text('Durum')),
-                DataColumn(label: Text('Detay')),
-              ],
-              rows: const [],
-            ),
-
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ManagerDateDetails()),
-                );
-              },
-              child: const Icon(Icons.book),
+            Appointment(
+              showBayiFilter: true,
+              showCustomerFilter: true,
+              userId: widget.userId,
+              appointments: appointments,
+              onFilter:
+                  ({
+                    int? bayiId,
+                    int? customerId,
+                    int? buildingId,
+                    String? status,
+                    DateTime? selectedDate,
+                  }) {
+                    _applyFilters(
+                      bayiId: bayiId,
+                      customerId: customerId,
+                      buildingId: buildingId,
+                      status: status,
+                      selectedDate: selectedDate,
+                    );
+                  },
             ),
           ],
         ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "87382093794",
+    "project_id": "ornek-fe2c9",
+    "storage_bucket": "ornek-fe2c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87382093794:android:afa96a5ecd37b18b9113bb",
+        "android_client_info": {
+          "package_name": "com.rw.ornek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc_TJ-Ts12zA1mxi700cJhjd-ZdAuFMGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

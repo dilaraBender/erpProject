@@ -4,7 +4,9 @@ import 'package:ornek/widgets/settings.dart';
 
 // BayiSettings : bayi paneli için ayarlar görünümü
 class BayiSettings extends StatefulWidget {
-  const BayiSettings({super.key});
+  final int userId;
+  final int bayiId;
+  const BayiSettings({super.key, required this.userId, required this.bayiId});
 
   @override
   State<BayiSettings> createState() => _BayiSettingsState();
@@ -13,6 +15,9 @@ class BayiSettings extends StatefulWidget {
 class _BayiSettingsState extends State<BayiSettings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: const AppBarWidget(), body: Settings());
+    return Scaffold(
+      appBar: AppBarWidget(userId: widget.userId),
+      body: Settings(userId: widget.userId),
+    );
   }
 }
