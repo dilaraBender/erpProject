@@ -1,0 +1,117 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Dilara\\source\\repos\\Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\controllers\\createcustomercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\controllers\\createcustomercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\services\\mailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\services\\mailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\dtos\\appointmentreportdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\dtos\\appointmentreportdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\dtos\\bayireportdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\dtos\\bayireportdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|c:\\users\\dilara\\source\\repos\\backend\\backend\\controllers\\bayireportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5CA7415-F77C-438A-BCED-36ABF5195658}|Backend\\Backend.csproj|solutionrelative:backend\\controllers\\bayireportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Program.cs",
+              "RelativeDocumentMoniker": "Backend\\Program.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Program.cs",
+              "RelativeToolTip": "Backend\\Program.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABkAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-15T13:09:37.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateCustomerController.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Controllers\\CreateCustomerController.cs",
+              "RelativeDocumentMoniker": "Backend\\Controllers\\CreateCustomerController.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Controllers\\CreateCustomerController.cs",
+              "RelativeToolTip": "Backend\\Controllers\\CreateCustomerController.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAkwDcAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T20:29:44.695Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MailService.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Services\\MailService.cs",
+              "RelativeDocumentMoniker": "Backend\\Services\\MailService.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Services\\MailService.cs",
+              "RelativeToolTip": "Backend\\Services\\MailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T20:23:25.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AppointmentReportDto.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\DTOs\\AppointmentReportDto.cs",
+              "RelativeDocumentMoniker": "Backend\\DTOs\\AppointmentReportDto.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\DTOs\\AppointmentReportDto.cs",
+              "RelativeToolTip": "Backend\\DTOs\\AppointmentReportDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAowBEAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T20:11:47.954Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BayiReportDto.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\DTOs\\BayiReportDto.cs",
+              "RelativeDocumentMoniker": "Backend\\DTOs\\BayiReportDto.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\DTOs\\BayiReportDto.cs",
+              "RelativeToolTip": "Backend\\DTOs\\BayiReportDto.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T19:54:15.161Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BayiReportController.cs",
+              "DocumentMoniker": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Controllers\\BayiReportController.cs",
+              "RelativeDocumentMoniker": "Backend\\Controllers\\BayiReportController.cs",
+              "ToolTip": "C:\\Users\\Dilara\\source\\repos\\Backend\\Backend\\Controllers\\BayiReportController.cs",
+              "RelativeToolTip": "Backend\\Controllers\\BayiReportController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBoAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T19:52:27.282Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
